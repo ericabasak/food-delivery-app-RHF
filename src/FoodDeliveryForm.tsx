@@ -1,4 +1,5 @@
-import { ChangeEvent, SyntheticEvent, useState } from 'react'
+import { SyntheticEvent} from "react";
+import { useForm } from "react-hook-form";
 
 
 type FoodDeliveryFormType = {
@@ -6,55 +7,26 @@ type FoodDeliveryFormType = {
     phone: string;
 }
 
-type FoodDeliveryFormErrorType = {
-    customerName: string;
-    phone: string;
-}
-
 export const FoodDeliveryForm = () => {
-    const [values, setValues] = useState<FoodDeliveryFormType>({
-        customerName: "",
-        phone: ""
-    });
 
-    const [errors, setErrors] = useState<FoodDeliveryFormErrorType>({
-        customerName: "",
-        phone: "",
-    })
+    const { register, handleSubmit } = useForm<FoodDeliveryFormType>();
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setValues({ ...values, [name]: value });
-    }
-
-    const validateFormData = () => {
-        let tempErrors: FoodDeliveryFormErrorType = {
-            customerName: "",
-            phone: "",
-        }
-        if (values.customerName === "")
-        tempErrors.customerName = "Customer namer is required";
-        if (values.phone === "")
-        tempErrors.phone = "Phone number is required";
-        setErrors(tempErrors);
-
-        return Object.values(errors).every(x => x == "")
-    }
-
-    const onSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(values);
-
-        if(validateFormData())
-        console.log('form data ', values)
-        else console.log('form is invalid')
-
+    const onSubmit = (formData: FoodDeliveryFormType) => {
+        console.log('form data ', formData)
     }
   return (
-    <form autoComplete="off" onSubmit={onSubmit}>
-        <input name="customerName" type="text" placeholder='Customer Name' value={values.customerName} onChange={handleInputChange}/>
+    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <input 
+        type="text" 
+        placeholder='Customer Name'
+        {...register("customerName")}
+        />
         <label>Customer Name</label>
-        <input name="Phone" type="text" placeholder='Phone' value={values.phone} onChange={handleInputChange} />
+        <input 
+        type="text" 
+        placeholder='phone'
+        {...register("phone")} 
+        />
         <label>Phone Number</label>
         <button className="btn btn-primary" type="submit">Submit</button>
     </form>
