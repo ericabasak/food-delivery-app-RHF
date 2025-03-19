@@ -1,4 +1,3 @@
-import { SyntheticEvent} from "react";
 import { useForm } from "react-hook-form";
 
 
@@ -11,21 +10,21 @@ export const FoodDeliveryForm = () => {
 
     const { register, handleSubmit } = useForm<FoodDeliveryFormType>();
 
-    const onSubmit = (formData: FoodDeliveryFormType) => {
-        console.log('form data ', formData)
+    const onSubmit = (formData: FoodDeliveryFormType) => { console.log(formData)
     }
+
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <input 
         type="text" 
         placeholder='Customer Name'
-        {...register("customerName")}
+        {...register("customerName", { value: "Erica"})}
         />
         <label>Customer Name</label>
         <input 
         type="text" 
         placeholder='phone'
-        {...register("phone")} 
+        {...register("phone", { required: "Phone number is required"})} 
         />
         <label>Phone Number</label>
         <button className="btn btn-primary" type="submit">Submit</button>

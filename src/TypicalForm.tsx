@@ -11,7 +11,7 @@ type FoodDeliveryFormErrorType = {
     phone: string;
 }
 
-export const FoodDeliveryForm = () => {
+export const TypicalForm = () => {
     const [values, setValues] = useState<FoodDeliveryFormType>({
         customerName: "",
         phone: ""
