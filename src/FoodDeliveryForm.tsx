@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, FieldError } from "react-hook-form";
 import { useRenderCount } from "./utils/useRenderCount";
 
 type FoodDeliveryFormType = {
@@ -23,19 +23,29 @@ export const FoodDeliveryForm = () => {
 
     const onSubmit = (formData: FoodDeliveryFormType) => { console.log(formData)}
 
+    const onError = (err: FieldError) => {
+        console.log("validation errors", err);
+    }
+
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+    <form autoComplete="off" noValidate onSubmit={handleSubmit(onSubmit, onError)}>
         <RenderCount />
         <input 
         type="text" 
         placeholder='Customer Name'
-        {...register("customerName")}
+        {...register("customerName", { 
+            required: true,
+        })}
         />
         <label>Customer Name</label>
         <input 
         type="text" 
         placeholder='phone'
-        {...register("phone")} 
+        {...register("phone", {
+            minLength: 10,
+            maxLength: 10,
+            required: true,
+        })} 
         />
         <label>Phone Number</label>
         <input
@@ -49,7 +59,13 @@ export const FoodDeliveryForm = () => {
         type="text"
         placeholder="email"
         disabled
-        {...register("email")}
+        {...register("email", {
+            pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "incorrect email",
+            }
+
+        } )}
         />
         <label>Email</label>
         <button className="btn btn-primary" type="submit">Submit</button>
