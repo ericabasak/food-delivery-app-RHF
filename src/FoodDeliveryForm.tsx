@@ -12,7 +12,10 @@ const RenderCount = useRenderCount();
 
 export const FoodDeliveryForm = () => {
 
-    const { register, handleSubmit } = useForm<FoodDeliveryFormType>({
+    const { register, handleSubmit, formState: errors } = useForm<FoodDeliveryFormType>({
+        mode: "onChange",
+        reValidateMode: "onSubmit",
+        shouldFocusError: true,
         defaultValues: {
             orderNo: new Date().valueOf(),
             customerName: "",
@@ -38,16 +41,24 @@ export const FoodDeliveryForm = () => {
         })}
         />
         <label>Customer Name</label>
+        {formState.errors.customerName && (<div>
+        {formState.errors.customerName?.message}</div>)}
         <input 
         type="text" 
         placeholder='phone'
         {...register("phone", {
+            required: "This is a required field",
             minLength: 10,
-            maxLength: 10,
-            required: true,
+            maxLength: {
+                value: 10,
+                message: "Must be 10 digits",
+            }
+            
         })} 
         />
         <label>Phone Number</label>
+        {formState.errors.phone && (<div>
+        {formState.errors.phone?.message}</div>)}
         <input
         type="text"
         placeholder="Order Number"
@@ -68,6 +79,8 @@ export const FoodDeliveryForm = () => {
         } )}
         />
         <label>Email</label>
+        {formState.errors.email && (<div>
+        {formState.errors.email?.message}</div>)}
         <button className="btn btn-primary" type="submit">Submit</button>
     </form>
   )
